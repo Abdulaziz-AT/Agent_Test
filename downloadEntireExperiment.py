@@ -1,10 +1,7 @@
 import os
 import comet_ml
 
-# --- Experiment Details ---
-# I have filled in the project and experiment names you provided.
-# This script assumes you have already run 'comet init' in your terminal
-# to create the local configuration file with your credentials.
+
 PROJECT_NAME = "Chatbot 2 Proj"
 EXPERIMENT_NAME = "A_2.015_meta-llama/llama-4-maverick_gemini/gemini-2.5-pro_20250720_1512"
 def download_experiment_assets(project_name, experiment_name):
@@ -18,7 +15,7 @@ def download_experiment_assets(project_name, experiment_name):
     print("Attempting to initialize Comet API using local configuration...")
 
     try:
-        # When no arguments are given, API() automatically looks for the .comet.config file.
+        
         api = comet_ml.API()
     except Exception as e:
         print("\nFATAL ERROR: Could not initialize the Comet API.")
@@ -28,8 +25,8 @@ def download_experiment_assets(project_name, experiment_name):
 
     print("API initialized successfully.")
 
-    # We use api.get() with the full path, which is the correct way to find
-    # an experiment by name, especially when the name contains slashes.
+    
+    
     experiment_path = f"{project_name}/{experiment_name}"
     print(f"Attempting to fetch experiment: {experiment_path}")
 
@@ -46,7 +43,7 @@ def download_experiment_assets(project_name, experiment_name):
 
     print(f"Successfully found experiment '{experiment.name}'.")
 
-    # Sanitize the experiment name to create a valid directory name (replace slashes)
+    
     safe_dir_name = experiment_name.replace("/", "_")
     output_dir = f"./{safe_dir_name}_assets"
     os.makedirs(output_dir, exist_ok=True)
