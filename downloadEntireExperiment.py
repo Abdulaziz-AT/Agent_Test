@@ -59,7 +59,7 @@ def download_experiment_assets(project_name, experiment_name):
 
         print(f"Downloading: {file_name}...")
         try:
-            # Added a check to ensure the asset_id is not None
+            # Added a check to ensure the asset_id is not None before downloading
             if asset_id is not None:
                 asset_data = experiment.get_asset(asset_id, return_type="binary")
                 with open(file_path, "wb") as f:
