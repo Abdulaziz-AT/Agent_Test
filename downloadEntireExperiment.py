@@ -34,7 +34,7 @@ def download_experiment_assets(project_name, experiment_name):
         print(f"Details: {e}")
         return
 
-    if experiment is None:
+    if not experiment:
         print("Error: Experiment not found. Please check your Project Name and Experiment Name.")
         return
 
@@ -46,7 +46,7 @@ def download_experiment_assets(project_name, experiment_name):
     print(f"Assets will be saved to: {output_dir}")
 
     asset_list = experiment.get_asset_list()
-    if asset_list is None or len(asset_list) == 0:
+    if not asset_list:
         print("No assets found for this experiment.")
         return
 
@@ -59,11 +59,14 @@ def download_experiment_assets(project_name, experiment_name):
 
         print(f"Downloading: {file_name}...")
         try:
-            asset_data = experiment.get_asset(asset_id, return_type="binary")
-            with open(file_path, "wb") as f:
-                f.write(asset_data)
-            print(f" -> Successfully saved to {file_path}")
-
+            # Added a check to ensure the asset_id is not None
+            if asset_id is not None:
+                asset_data = experiment.get_asset(asset_id, return_type="binary")
+                with open(file_path, "wb") as f:
+                    f.write(asset_data)
+                print(f" -> Successfully saved to {file_path}")
+            else:
+                print(f" -> Failed to download {file_name}. Error: Asset ID is None")
         except Exception as e:
             print(f" -> Failed to download {file_name}. Error: {e}")
 
