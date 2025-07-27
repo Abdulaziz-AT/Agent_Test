@@ -1,9 +1,9 @@
 import os
 import comet_ml
 
-
 PROJECT_NAME = "Chatbot 2 Proj"
 EXPERIMENT_NAME = "A_2.015_meta-llama/llama-4-maverick_gemini/gemini-2.5-pro_20250720_1512"
+
 def download_experiment_assets(project_name, experiment_name):
     """
     Connects to Comet/Opik using local credentials and downloads assets from an experiment.
@@ -15,7 +15,7 @@ def download_experiment_assets(project_name, experiment_name):
     print("Attempting to initialize Comet API using local configuration...")
 
     try:
-        
+        # Initialize the Comet API
         api = comet_ml.API()
     except Exception as e:
         print("\nFATAL ERROR: Could not initialize the Comet API.")
@@ -25,12 +25,12 @@ def download_experiment_assets(project_name, experiment_name):
 
     print("API initialized successfully.")
 
-    
-    
+    # Construct the experiment path
     experiment_path = f"{project_name}/{experiment_name}"
     print(f"Attempting to fetch experiment: {experiment_path}")
 
     try:
+        # Get the experiment from the API
         experiment = api.get(experiment_path)
     except Exception as e:
         print(f"Error: Could not find the experiment. Please verify the project and experiment names.")
@@ -43,12 +43,13 @@ def download_experiment_assets(project_name, experiment_name):
 
     print(f"Successfully found experiment '{experiment.name}'.")
 
-    
+    # Create a safe directory name and output directory
     safe_dir_name = experiment_name.replace("/", "_")
     output_dir = f"./{safe_dir_name}_assets"
     os.makedirs(output_dir, exist_ok=True)
     print(f"Assets will be saved to: {output_dir}")
 
+    # Get the list of assets for the experiment
     asset_list = experiment.get_asset_list()
     if not asset_list:
         print("No assets found for this experiment.")
@@ -63,12 +64,14 @@ def download_experiment_assets(project_name, experiment_name):
 
         print(f"Downloading: {file_name}...")
         try:
+            # Download the asset and save it to the output directory
             asset_data = experiment.get_asset(asset_id, return_type="binary")
             with open(file_path, "wb") as f:
                 f.write(asset_data)
             print(f" -> Successfully saved to {file_path}")
 
         except Exception as e:
+            # Handle any exceptions that occur during the download process
             print(f" -> Failed to download {file_name}. Error: {e}")
 
     print("\nDownload process finished.")
@@ -76,6 +79,6 @@ def download_experiment_assets(project_name, experiment_name):
 
 if __name__ == "__main__":
     download_experiment_assets(
-            project_name=PROJECT_NAME,
+        project_name=PROJECT_NAME,
         experiment_name=EXPERIMENT_NAME
     )
