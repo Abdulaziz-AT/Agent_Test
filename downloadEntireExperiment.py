@@ -40,6 +40,7 @@ def download_experiment_assets(project_name, experiment_name):
 
     print(f"Successfully found experiment '{experiment.name}'.")
 
+    # Create a safe directory name by replacing '/' with '_'
     safe_dir_name = experiment_name.replace("/", "_")
     output_dir = f"./{safe_dir_name}_assets"
     os.makedirs(output_dir, exist_ok=True)
@@ -59,14 +60,14 @@ def download_experiment_assets(project_name, experiment_name):
 
         print(f"Downloading: {file_name}...")
         try:
-            # Added a check to ensure the asset_id is not None before attempting to download
-            if asset_id is not None:
+            # Check if the asset exists before downloading
+            if experiment.get_asset(asset_id):
                 asset_data = experiment.get_asset(asset_id, return_type="binary")
                 with open(file_path, "wb") as f:
                     f.write(asset_data)
                 print(f" -> Successfully saved to {file_path}")
             else:
-                print(f" -> Failed to download {file_name}. Error: Asset ID is None")
+                print(f" -> Asset {file_name} not found.")
         except Exception as e:
             print(f" -> Failed to download {file_name}. Error: {e}")
 
